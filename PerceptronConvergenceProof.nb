@@ -1,0 +1,738 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     27906,        728]
+NotebookOptionsPosition[     25722,        685]
+NotebookOutlinePosition[     26124,        701]
+CellTagsIndexPosition[     26081,        698]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Perceptron Convergence Theorem-Numerical Illustration", "Subsection",
+ CellChangeTimes->{
+  3.973607241872801*^9},ExpressionUUID->"43d869af-6ced-4b93-bd14-\
+f0f27d2cae9c"],
+
+Cell[TextData[{
+ "We work in \[DoubleStruckCapitalR]\.b2 and construct data that is linearly \
+separable by a \"teacher\" hyperplane ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SuperscriptBox["w", "*"], ",", 
+     SuperscriptBox["b", "*"]}], ")"}], TraditionalForm]],
+  FormatType->TraditionalForm,ExpressionUUID->
+  "8accd605-c330-4dbe-97e3-73f7c4d220a3"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.973607248521777*^9, 
+  3.9736073311210318`*^9}},ExpressionUUID->"1d73cedd-c26e-4340-bcc5-\
+3f95a0569fb3"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", "generateSeparableData", "]"}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"generateSeparableData", "[", 
+     RowBox[{
+      RowBox[{"nSamples_Integer", ":", "60"}], ",", 
+      RowBox[{"dim_Integer", ":", "2"}], ",", 
+      RowBox[{"margin_", "?", 
+       RowBox[{"NumericQ", ":", "0.5"}]}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"wStar", ",", "bStar", ",", "x", ",", "m", ",", "label", ",", 
+        RowBox[{"X", "=", 
+         RowBox[{"{", "}"}]}], ",", 
+        RowBox[{"y", "=", 
+         RowBox[{"{", "}"}]}], ",", "rng"}], "}"}], ",", 
+      RowBox[{"(*", 
+       RowBox[{"Random", " ", "but", " ", "fixed", " ", "separator"}], "*)"}], 
+      RowBox[{
+       RowBox[{"wStar", "=", 
+        RowBox[{"Normalize", "[", 
+         RowBox[{"RandomReal", "[", 
+          RowBox[{
+           RowBox[{"NormalDistribution", "[", 
+            RowBox[{"0", ",", "1"}], "]"}], ",", "dim"}], "]"}], "]"}]}], ";",
+        "\n", 
+       RowBox[{"bStar", "=", 
+        RowBox[{"RandomReal", "[", 
+         RowBox[{"NormalDistribution", "[", 
+          RowBox[{"0", ",", "0.1"}], "]"}], "]"}]}], ";", "\n", 
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "X", "]"}], "<", "nSamples"}], ",", 
+         RowBox[{
+          RowBox[{"x", "=", 
+           RowBox[{"RandomVariate", "[", 
+            RowBox[{
+             RowBox[{"NormalDistribution", "[", 
+              RowBox[{"0", ",", "1"}], "]"}], ",", "dim"}], "]"}]}], ";", 
+          "\n", 
+          RowBox[{"m", "=", 
+           RowBox[{
+            RowBox[{"wStar", " ", ".", " ", "x"}], "+", "bStar"}]}], ";", 
+          "\n", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Abs", "[", "m", "]"}], "<", "margin"}], ",", 
+            RowBox[{"Continue", "[", "]"}]}], "]"}], ";", "\n", 
+          RowBox[{"label", "=", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"m", ">", "0"}], ",", "1", ",", 
+             RowBox[{"-", "1"}]}], "]"}]}], ";", "\n", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"X", ",", "x"}], "]"}], ";", "\n", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"y", ",", "label"}], "]"}], ";"}]}], "]"}], ";", "\n", 
+       RowBox[{"<|", 
+        RowBox[{
+         RowBox[{"\"\<X\>\"", "->", "X"}], ",", 
+         RowBox[{"\"\<y\>\"", "->", "y"}], ",", 
+         RowBox[{"\"\<wStar\>\"", "->", "wStar"}], ",", 
+         RowBox[{"\"\<bStar\>\"", "->", "bStar"}]}], "|>"}]}]}], "]"}]}], 
+   ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"data", "=", 
+   RowBox[{"generateSeparableData", "[", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"X", "=", 
+   RowBox[{"data", "[", "\"\<X\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"y", "=", 
+   RowBox[{"data", "[", "\"\<y\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"wStar", "=", 
+   RowBox[{"data", "[", "\"\<wStar\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"bStar", "=", 
+    RowBox[{"data", "[", "\"\<bStar\>\"", "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{"Dimensions", "[", "X", "]"}], "\n", 
+ RowBox[{"Counts", "[", "y", "]"}], "\n"}], "Code",
+ CellChangeTimes->{{3.973607374152568*^9, 
+  3.973607375238968*^9}},ExpressionUUID->"1f55b20b-75f7-4fd4-9bf2-\
+08ebdd4cff58"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Plot of linearly separable data", "Subsection",ExpressionUUID->"c7058024-9be8-4abd-86dc-51acf0557ccb"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"pos", " ", "=", " ", 
+   RowBox[{"Pick", "[", 
+    RowBox[{"X", ",", " ", 
+     RowBox[{"UnitStep", "[", "y", "]"}], ",", " ", "1"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"neg", " ", "=", " ", 
+    RowBox[{"Pick", "[", 
+     RowBox[{"X", ",", " ", 
+      RowBox[{"UnitStep", "[", 
+       RowBox[{"-", "y"}], "]"}], ",", " ", "1"}], "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{"ListPlot", "[", "\n", " ", 
+  RowBox[{
+   RowBox[{"{", "\n", "  ", 
+    RowBox[{"pos", ",", "\n", "  ", "neg"}], "\n", " ", "}"}], ",", "\n", " ", 
+   RowBox[{"PlotStyle", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"PointSize", "[", "Large", "]"}], ",", " ", 
+      RowBox[{"PointSize", "[", "Large", "]"}]}], "}"}]}], ",", "\n", " ", 
+   RowBox[{"PlotLegends", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{"\"\<+1\>\"", ",", " ", "\"\<-1\>\""}], "}"}]}], ",", "\n", " ", 
+   
+   RowBox[{"AxesLabel", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{"\"\<x1\>\"", ",", " ", "\"\<x2\>\""}], "}"}]}], ",", "\n", " ", 
+   
+   RowBox[{"PlotRange", " ", "->", " ", "All"}], ",", "\n", " ", 
+   RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", 
+  "]"}], "\n"}], "Code",ExpressionUUID->"7fa0ddb4-8e6a-4cf7-b276-\
+cc0176bbca47"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Perceptron algorithm with tracking", "Subsection",ExpressionUUID->"dbf5266f-13be-4135-8c2b-5e6e1d55a003"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", "perceptronTrain", "]"}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"perceptronTrain", "[", 
+     RowBox[{"X_List", ",", " ", "y_List", ",", " ", 
+      RowBox[{"maxEpochs_Integer", " ", ":", " ", "1000"}], ",", " ", 
+      RowBox[{"wStar_", ":", " ", "None"}], ",", " ", 
+      RowBox[{"bStar_", ":", " ", "None"}]}], "]"}], " ", ":=", "\n", " ", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "nSamples", ",", " ", "dim", ",", " ", "w", ",", " ", "b", ",", " ", 
+        "epoch", ",", " ", "i", ",", " ", "xi", ",", " ", "yi", ",", " ", 
+        "margin", ",", " ", "mistakes", ",", "\n", "   ", 
+        RowBox[{"historyW", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", " ", 
+        RowBox[{"historyB", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", " ", 
+        RowBox[{"historyWDotWStar", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", " ", 
+        RowBox[{"historyWNormSq", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", "\n", "   ", 
+        RowBox[{"mistakesPerEpoch", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", " ", 
+        RowBox[{"totalUpdates", " ", "=", " ", "0"}], ",", " ", "wDot"}], 
+       "}"}], ",", "\n", "\n", "  ", 
+      RowBox[{
+       RowBox[{"nSamples", " ", "=", " ", 
+        RowBox[{"Length", "[", "X", "]"}]}], ";", "\n", "  ", 
+       RowBox[{"dim", " ", "=", " ", 
+        RowBox[{"Length", "[", 
+         RowBox[{"First", "[", "X", "]"}], "]"}]}], ";", "\n", "  ", 
+       RowBox[{"w", " ", "=", " ", 
+        RowBox[{"ConstantArray", "[", 
+         RowBox[{"0.", ",", " ", "dim"}], "]"}]}], ";", "\n", "  ", 
+       RowBox[{"b", " ", "=", " ", "0."}], ";", "\n", "\n", "  ", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"epoch", " ", "=", " ", "1"}], ",", " ", 
+         RowBox[{"epoch", " ", "<=", " ", "maxEpochs"}], ",", " ", 
+         RowBox[{"epoch", "++"}], ",", "\n", "   ", 
+         RowBox[{
+          RowBox[{"mistakes", " ", "=", " ", "0"}], ";", "\n", "   ", 
+          RowBox[{"For", "[", 
+           RowBox[{
+            RowBox[{"i", " ", "=", " ", "1"}], ",", " ", 
+            RowBox[{"i", " ", "<=", " ", "nSamples"}], ",", " ", 
+            RowBox[{"i", "++"}], ",", "\n", "    ", 
+            RowBox[{
+             RowBox[{"xi", " ", "=", " ", 
+              RowBox[{"X", "[", 
+               RowBox[{"[", "i", "]"}], "]"}]}], ";", "\n", "    ", 
+             RowBox[{"yi", " ", "=", " ", 
+              RowBox[{"y", "[", 
+               RowBox[{"[", "i", "]"}], "]"}]}], ";", "\n", "    ", 
+             RowBox[{"margin", " ", "=", " ", 
+              RowBox[{"yi", " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"w", " ", ".", " ", "xi"}], " ", "+", " ", "b"}], 
+                ")"}]}]}], ";", "\n", "    ", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"margin", " ", "<=", " ", "0"}], ",", "\n", "     ", 
+               RowBox[{
+                RowBox[{"w", " ", "=", " ", 
+                 RowBox[{"w", " ", "+", " ", 
+                  RowBox[{"yi", " ", "xi"}]}]}], ";", "\n", "     ", 
+                RowBox[{"b", " ", "=", " ", 
+                 RowBox[{"b", " ", "+", " ", "yi"}]}], ";", "\n", "     ", 
+                RowBox[{"mistakes", "++"}], ";", "\n", "     ", 
+                RowBox[{"totalUpdates", "++"}], ";", "\n", "\n", "     ", 
+                RowBox[{"If", "[", 
+                 RowBox[{
+                  RowBox[{"wStar", " ", "=!=", " ", "None"}], ",", "\n", 
+                  "      ", 
+                  RowBox[{
+                   RowBox[{"wDot", " ", "=", " ", 
+                    RowBox[{"w", " ", ".", " ", "wStar"}]}], ";", "\n", 
+                   "      ", 
+                   RowBox[{"AppendTo", "[", 
+                    RowBox[{"historyWDotWStar", ",", " ", "wDot"}], "]"}], 
+                   ";"}], "\n", "      ", ",", "\n", "      ", 
+                  RowBox[{
+                   RowBox[{"AppendTo", "[", 
+                    RowBox[{"historyWDotWStar", ",", " ", 
+                    RowBox[{"Missing", "[", "\"\<NotAvailable\>\"", "]"}]}], 
+                    "]"}], ";"}]}], "\n", "     ", "]"}], ";", "\n", "     ", 
+                
+                RowBox[{"AppendTo", "[", 
+                 RowBox[{"historyWNormSq", ",", " ", 
+                  RowBox[{"w", " ", ".", " ", "w"}]}], "]"}], ";", "\n", 
+                "     ", 
+                RowBox[{"AppendTo", "[", 
+                 RowBox[{"historyW", ",", " ", "w"}], "]"}], ";", "\n", 
+                "     ", 
+                RowBox[{"AppendTo", "[", 
+                 RowBox[{"historyB", ",", " ", "b"}], "]"}], ";"}]}], "\n", 
+              "    ", "]"}], ";"}]}], "\n", "   ", "]"}], ";", "\n", "   ", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"mistakesPerEpoch", ",", " ", "mistakes"}], "]"}], ";", 
+          "\n", "   ", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"mistakes", " ", "==", " ", "0"}], ",", " ", 
+            RowBox[{"Break", "[", "]"}]}], "]"}], ";"}]}], "\n", "  ", "]"}], 
+       ";", "\n", "\n", "  ", 
+       RowBox[{"<|", "\n", "   ", 
+        RowBox[{
+         RowBox[{"\"\<wFinal\>\"", " ", "->", " ", "w"}], ",", "\n", "   ", 
+         RowBox[{"\"\<bFinal\>\"", " ", "->", " ", "b"}], ",", "\n", "   ", 
+         RowBox[{"\"\<historyW\>\"", " ", "->", " ", "historyW"}], ",", "\n", 
+         "   ", 
+         RowBox[{"\"\<historyB\>\"", " ", "->", " ", "historyB"}], ",", "\n", 
+         "   ", 
+         RowBox[{
+         "\"\<historyWDotWStar\>\"", " ", "->", " ", "historyWDotWStar"}], 
+         ",", "\n", "   ", 
+         RowBox[{"\"\<historyWNormSq\>\"", " ", "->", " ", "historyWNormSq"}],
+          ",", "\n", "   ", 
+         RowBox[{
+         "\"\<mistakesPerEpoch\>\"", " ", "->", " ", "mistakesPerEpoch"}], 
+         ",", "\n", "   ", 
+         RowBox[{"\"\<totalUpdates\>\"", " ", "->", " ", "totalUpdates"}]}], 
+        "\n", "  ", "|>"}]}]}], "\n", " ", "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"result", " ", "=", " ", 
+    RowBox[{"perceptronTrain", "[", 
+     RowBox[{
+     "X", ",", " ", "y", ",", " ", "100", ",", " ", "wStar", ",", " ", 
+      "bStar"}], "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"wFinal", " ", "=", " ", 
+   RowBox[{"result", "[", "\"\<wFinal\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"bFinal", " ", "=", " ", 
+   RowBox[{"result", "[", "\"\<bFinal\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"totalUpdates", " ", "=", " ", 
+   RowBox[{"result", "[", "\"\<totalUpdates\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"mistakesPerEpoch", " ", "=", " ", 
+    RowBox[{"result", "[", "\"\<mistakesPerEpoch\>\"", "]"}]}], ";"}], 
+  "\n"}], "\n", "wFinal", "\n", "bFinal", "\n", "totalUpdates", "\n", \
+"mistakesPerEpoch", "\n"}], "Code",ExpressionUUID->"c8c888f9-19b8-44eb-83e0-\
+e006dee35dec"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ListLinePlot", "[", "\n", " ", 
+   RowBox[{"mistakesPerEpoch", ",", "\n", " ", 
+    RowBox[{"AxesLabel", " ", "->", " ", 
+     RowBox[{"{", 
+      RowBox[{"\"\<epoch\>\"", ",", " ", "\"\<mistakes\>\""}], "}"}]}], ",", 
+    "\n", " ", 
+    RowBox[{"PlotMarkers", " ", "->", " ", "Automatic"}], ",", "\n", " ", 
+    RowBox[{"PlotTheme", " ", "->", " ", "\"\<Scientific\>\""}], ",", "\n", 
+    " ", 
+    RowBox[{"ImageSize", " ", "->", " ", "Large"}], ",", "\n", " ", 
+    RowBox[{
+    "PlotLabel", " ", "->", " ", 
+     "\"\<Mistakes per epoch (separable case)\>\""}]}], "\n", "]"}], 
+  "\n"}]], "Code",ExpressionUUID->"30dca4d7-fedc-4582-bd43-b9037fedfa1d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Decision boundary in R^2", "Subsection",ExpressionUUID->"23f1afef-e7ee-48cd-8011-dda20c511bde"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", "plotDecisionBoundary", "]"}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"plotDecisionBoundary", "[", 
+     RowBox[{"w_", ",", " ", "b_", ",", " ", "X_", ",", " ", "y_"}], "]"}], 
+    " ", ":=", "\n", " ", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"pos", ",", " ", "neg", ",", " ", "line"}], "}"}], ",", "\n", 
+      "  ", 
+      RowBox[{
+       RowBox[{"pos", " ", "=", " ", 
+        RowBox[{"Pick", "[", 
+         RowBox[{"X", ",", " ", 
+          RowBox[{"UnitStep", "[", "y", "]"}], ",", " ", "1"}], "]"}]}], ";", 
+       "\n", "  ", 
+       RowBox[{"neg", " ", "=", " ", 
+        RowBox[{"Pick", "[", 
+         RowBox[{"X", ",", " ", 
+          RowBox[{"UnitStep", "[", 
+           RowBox[{"-", "y"}], "]"}], ",", " ", "1"}], "]"}]}], ";", "\n", 
+       "\n", "  ", 
+       RowBox[{"Show", "[", "\n", "   ", 
+        RowBox[{
+         RowBox[{"ListPlot", "[", "\n", "    ", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"pos", ",", " ", "neg"}], "}"}], ",", "\n", "    ", 
+           RowBox[{"PlotStyle", " ", "->", " ", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"PointSize", "[", "Large", "]"}], ",", " ", 
+              RowBox[{"PointSize", "[", "Large", "]"}]}], "}"}]}], ",", "\n", 
+           "    ", 
+           RowBox[{"PlotLegends", " ", "->", " ", 
+            RowBox[{"{", 
+             RowBox[{"\"\<+1\>\"", ",", " ", "\"\<-1\>\""}], "}"}]}], ",", 
+           "\n", "    ", 
+           RowBox[{"AxesLabel", " ", "->", " ", 
+            RowBox[{"{", 
+             RowBox[{"\"\<x1\>\"", ",", " ", "\"\<x2\>\""}], "}"}]}], ",", 
+           "\n", "    ", 
+           RowBox[{"PlotRange", " ", "->", " ", "All"}]}], "\n", "   ", "]"}],
+          ",", "\n", "   ", 
+         RowBox[{"(*", " ", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"line", " ", 
+              RowBox[{"w", ".", "x"}]}], " ", "+", " ", "b"}], " ", "==", " ",
+             "0"}], " ", "=", 
+           RowBox[{
+            RowBox[{">", " ", "x2"}], " ", "=", " ", 
+            RowBox[{
+             RowBox[{"-", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"w1", " ", "x1"}], " ", "+", " ", "b"}], ")"}]}], "/",
+              "w2"}]}]}], " ", "*)"}], "\n", "   ", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"w", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], " ", "!=", " ", "0"}], ",", "\n",
+            "    ", 
+           RowBox[{
+            RowBox[{"line", " ", "=", " ", 
+             RowBox[{"Plot", "[", "\n", "      ", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"-", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"w", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], " ", "x"}], " ", "+", " ",
+                    "b"}], ")"}]}], "/", 
+                RowBox[{"w", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], ",", "\n", "      ", 
+               RowBox[{"{", 
+                RowBox[{"x", ",", " ", 
+                 RowBox[{
+                  RowBox[{"Min", "[", 
+                   RowBox[{"X", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "1"}], "]"}], "]"}], "]"}], " ", 
+                  "-", " ", "1"}], ",", " ", 
+                 RowBox[{
+                  RowBox[{"Max", "[", 
+                   RowBox[{"X", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "1"}], "]"}], "]"}], "]"}], " ", 
+                  "+", " ", "1"}]}], "}"}]}], "\n", "     ", "]"}]}], ";", 
+            "\n", "    ", "line"}], ",", "\n", "    ", 
+           RowBox[{"{", "}"}]}], "\n", "   ", "]"}], ",", "\n", "   ", 
+         RowBox[{"ImageSize", " ", "->", " ", "Large"}], ",", "\n", "   ", 
+         RowBox[{
+         "PlotLabel", " ", "->", " ", 
+          "\"\<Perceptron decision boundary\>\""}]}], "\n", "  ", "]"}]}]}], 
+     "\n", " ", "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"plotDecisionBoundary", "[", 
+   RowBox[{"wFinal", ",", " ", "bFinal", ",", " ", "X", ",", " ", "y"}], 
+   "]"}], ";"}], "\n"}], "Code",ExpressionUUID->"bb0a45c0-13dc-45b3-bba3-\
+c17ff61d4577"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["R, gamma, and theoretical bound", "Subsection",ExpressionUUID->"7573aeb9-24d0-4c05-b9c7-182eae463c2d"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"norms", " ", "=", " ", 
+   RowBox[{"Norm", " ", "/@", " ", "X"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"R", " ", "=", " ", 
+    RowBox[{"Max", "[", "norms", "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"marginsTeacher", " ", "=", " ", 
+   RowBox[{"MapThread", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#1", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"#2", " ", ".", " ", "wStar"}], " ", "+", " ", "bStar"}], 
+        ")"}]}], " ", "&"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"y", ",", " ", "X"}], "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"gamma", " ", "=", " ", 
+    RowBox[{"Min", "[", "marginsTeacher", "]"}]}], ";"}], 
+  "\n"}], "\n", "R", "\n", 
+ RowBox[{"gamma", "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"bound", " ", "=", " ", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"gamma", " ", ">", " ", "0"}], ",", " ", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"R", "/", "gamma"}], ")"}], "^", "2"}], ",", " ", "Infinity"}],
+     "]"}]}], "\n"}], "\n", 
+ RowBox[{"<|", 
+  RowBox[{
+   RowBox[{"\"\<R\>\"", " ", "->", " ", "R"}], ",", " ", 
+   RowBox[{"\"\<gamma\>\"", " ", "->", " ", "gamma"}], ",", " ", 
+   RowBox[{"\"\<bound\>\"", " ", "->", " ", "bound"}], ",", " ", 
+   RowBox[{"\"\<observedUpdates\>\"", " ", "->", " ", "totalUpdates"}]}], 
+  "|>"}], "\n"}], "Code",ExpressionUUID->"845a9342-0d16-4b79-b37b-\
+c741334a4db8"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"wDotWStar", " ", "=", " ", 
+   RowBox[{"DeleteMissing", "[", 
+    RowBox[{"result", "[", "\"\<historyWDotWStar\>\"", "]"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"wNormSq", " ", "=", " ", 
+   RowBox[{"result", "[", "\"\<historyWNormSq\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"steps", " ", "=", " ", 
+    RowBox[{"Range", "[", 
+     RowBox[{"Length", "[", "wNormSq", "]"}], "]"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"ListLinePlot", "[", "\n", " ", 
+   RowBox[{"wDotWStar", ",", "\n", " ", 
+    RowBox[{"AxesLabel", " ", "->", " ", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<update step t\>\"", ",", " ", "\"\<w_t \[CenterDot] w*\>\""}], 
+      "}"}]}], ",", "\n", " ", 
+    RowBox[{"PlotTheme", " ", "->", " ", "\"\<Scientific\>\""}], ",", "\n", 
+    " ", 
+    RowBox[{
+    "PlotLabel", " ", "->", " ", "\"\<Growth of w_t \[CenterDot] w*\>\""}], 
+    ",", "\n", " ", 
+    RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", "]"}], 
+  "\n"}], "\n", 
+ RowBox[{"ListLinePlot", "[", "\n", " ", 
+  RowBox[{"wNormSq", ",", "\n", " ", 
+   RowBox[{"AxesLabel", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{"\"\<update step t\>\"", ",", " ", "\"\<||w_t||^2\>\""}], 
+     "}"}]}], ",", "\n", " ", 
+   RowBox[{"PlotTheme", " ", "->", " ", "\"\<Scientific\>\""}], ",", "\n", 
+   " ", 
+   RowBox[{"PlotLabel", " ", "->", " ", "\"\<Growth of ||w_t||^2\>\""}], ",", 
+   "\n", " ", 
+   RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", 
+  "]"}], "\n"}], "Code",ExpressionUUID->"d15dd6c4-db4c-47c2-8d77-\
+c7c75027fd41"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Non-separable data: XOR", "Section",ExpressionUUID->"d42547de-dead-4d09-81c9-412134ac2c32"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Xxor", " ", "=", " ", 
+   RowBox[{"{", "\n", "  ", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1.", ",", " ", "1."}], "}"}], ",", "\n", "  ", 
+     RowBox[{"{", 
+      RowBox[{"1.", ",", " ", 
+       RowBox[{"-", "1."}]}], "}"}], ",", "\n", "  ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1."}], ",", " ", "1."}], "}"}], ",", "\n", "  ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1."}], ",", " ", 
+       RowBox[{"-", "1."}]}], "}"}]}], "\n", "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"yxor", " ", "=", " ", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", " ", 
+      RowBox[{"-", "1"}], ",", " ", 
+      RowBox[{"-", "1"}], ",", " ", "1"}], "}"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{"ListPlot", "[", "\n", " ", 
+  RowBox[{
+   RowBox[{"{", "\n", "  ", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{"Xxor", ",", " ", 
+       RowBox[{"UnitStep", "[", "yxor", "]"}], ",", " ", "1"}], "]"}], ",", 
+     "\n", "  ", 
+     RowBox[{"Pick", "[", 
+      RowBox[{"Xxor", ",", " ", 
+       RowBox[{"UnitStep", "[", 
+        RowBox[{"-", "yxor"}], "]"}], ",", " ", "1"}], "]"}]}], "\n", " ", 
+    "}"}], ",", "\n", " ", 
+   RowBox[{"PlotStyle", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"PointSize", "[", "Large", "]"}], ",", " ", 
+      RowBox[{"PointSize", "[", "Large", "]"}]}], "}"}]}], ",", "\n", " ", 
+   RowBox[{"PlotLegends", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{"\"\<+1\>\"", ",", " ", "\"\<-1\>\""}], "}"}]}], ",", "\n", " ", 
+   
+   RowBox[{"AxesLabel", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{"\"\<x1\>\"", ",", " ", "\"\<x2\>\""}], "}"}]}], ",", "\n", " ", 
+   
+   RowBox[{"PlotRange", " ", "->", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "2"}], ",", " ", "2"}], "}"}], ",", " ", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "2"}], ",", " ", "2"}], "}"}]}], "}"}]}], ",", "\n", " ", 
+   RowBox[{
+   "PlotLabel", " ", "->", " ", 
+    "\"\<XOR pattern (not linearly separable)\>\""}], ",", "\n", " ", 
+   RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", 
+  "]"}], "\n"}], "Code",ExpressionUUID->"5ff1a693-bc0c-4ea3-8a29-\
+3910a9c9f9a6"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"resultXor", " ", "=", " ", 
+    RowBox[{"perceptronTrain", "[", 
+     RowBox[{"Xxor", ",", " ", "yxor", ",", " ", "50"}], "]"}]}], ";"}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"wXor", " ", "=", " ", 
+   RowBox[{"resultXor", "[", "\"\<wFinal\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"bXor", " ", "=", " ", 
+   RowBox[{"resultXor", "[", "\"\<bFinal\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"mistakesXor", " ", "=", " ", 
+   RowBox[{"resultXor", "[", "\"\<mistakesPerEpoch\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"totalUpdatesXor", " ", "=", " ", 
+    RowBox[{"resultXor", "[", "\"\<totalUpdates\>\"", "]"}]}], ";"}], 
+  "\n"}], "\n", "wXor", "\n", "bXor", "\n", "totalUpdatesXor", "\n", \
+"mistakesXor", "\n"}], "Code",ExpressionUUID->"21af9424-a3c8-469d-9430-\
+2cb58389c8ed"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ListLinePlot", "[", "\n", " ", 
+   RowBox[{"mistakesXor", ",", "\n", " ", 
+    RowBox[{"AxesLabel", " ", "->", " ", 
+     RowBox[{"{", 
+      RowBox[{"\"\<epoch\>\"", ",", " ", "\"\<mistakes\>\""}], "}"}]}], ",", 
+    "\n", " ", 
+    RowBox[{"PlotTheme", " ", "->", " ", "\"\<Scientific\>\""}], ",", "\n", 
+    " ", 
+    RowBox[{
+    "PlotLabel", " ", "->", " ", 
+     "\"\<Mistakes per epoch (XOR, non-separable)\>\""}], ",", "\n", " ", 
+    RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", "]"}], 
+  "\n"}]], "Code",ExpressionUUID->"a4eb72c7-ae41-4bdc-9148-7449fe2bfda2"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"plotDecisionBoundary", "[", 
+    RowBox[{"wXor", ",", " ", "bXor", ",", " ", "Xxor", ",", " ", "yxor"}], 
+    "]"}], ";"}], "\n"}]], "Code",ExpressionUUID->"b0c96980-59c9-4da5-ac26-\
+33ebbdcc2dd5"]
+}, Open  ]]
+},
+WindowSize->{606., 665.25},
+WindowMargins->{{Automatic, 81.75}, {Automatic, 43.5}},
+FrontEndVersion->"13.2 for Linux x86 (64-bit) (December 7, 2022)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"01384912-f306-4f9c-8221-c5fb95ced7ac"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 177, 3, 54, "Subsection",ExpressionUUID->"43d869af-6ced-4b93-bd14-f0f27d2cae9c"],
+Cell[760, 27, 522, 15, 58, "Text",ExpressionUUID->"1d73cedd-c26e-4340-bcc5-3f95a0569fb3"],
+Cell[1285, 44, 3389, 92, 453, "Code",ExpressionUUID->"1f55b20b-75f7-4fd4-9bf2-08ebdd4cff58"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4711, 141, 108, 0, 54, "Subsection",ExpressionUUID->"c7058024-9be8-4abd-86dc-51acf0557ccb"],
+Cell[4822, 143, 1282, 35, 343, "Code",ExpressionUUID->"7fa0ddb4-8e6a-4cf7-b276-cc0176bbca47"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6141, 183, 111, 0, 54, "Subsection",ExpressionUUID->"dbf5266f-13be-4135-8c2b-5e6e1d55a003"],
+Cell[6255, 185, 6979, 152, 1315, "Code",ExpressionUUID->"c8c888f9-19b8-44eb-83e0-e006dee35dec"],
+Cell[13237, 339, 691, 15, 216, "Code",ExpressionUUID->"30dca4d7-fedc-4582-bd43-b9037fedfa1d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13965, 359, 101, 0, 54, "Subsection",ExpressionUUID->"23f1afef-e7ee-48cd-8011-dda20c511bde"],
+Cell[14069, 361, 4359, 110, 677, "Code",ExpressionUUID->"bb0a45c0-13dc-45b3-bba3-c17ff61d4577"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18465, 476, 108, 0, 54, "Subsection",ExpressionUUID->"7573aeb9-24d0-4c05-b9c7-182eae463c2d"],
+Cell[18576, 478, 1442, 42, 293, "Code",ExpressionUUID->"845a9342-0d16-4b79-b37b-c741334a4db8"],
+Cell[20021, 522, 1591, 41, 439, "Code",ExpressionUUID->"d15dd6c4-db4c-47c2-8d77-c7c75027fd41"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21649, 568, 97, 0, 68, "Section",ExpressionUUID->"d42547de-dead-4d09-81c9-412134ac2c32"],
+Cell[21749, 570, 2230, 64, 473, "Code",ExpressionUUID->"5ff1a693-bc0c-4ea3-8a29-3910a9c9f9a6"],
+Cell[23982, 636, 859, 22, 271, "Code",ExpressionUUID->"21af9424-a3c8-469d-9430-2cb58389c8ed"],
+Cell[24844, 660, 615, 14, 196, "Code",ExpressionUUID->"a4eb72c7-ae41-4bdc-9148-7449fe2bfda2"],
+Cell[25462, 676, 244, 6, 73, "Code",ExpressionUUID->"b0c96980-59c9-4da5-ac26-33ebbdcc2dd5"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
