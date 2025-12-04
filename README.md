@@ -12,4 +12,5 @@ Bebenhausen*
   
 * [Jupyter notebook](./perceptron_convergence_demo.ipynb)  
 * [Mathematica notebook](./PerceptronConvergenceProof.nb)  
+      * [PDF](./PerceptronConvergenceProof.nb.pdf)  
       * [Wolfram language](./PerceptronConvergenceProof.wl)  
